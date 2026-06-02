@@ -38,6 +38,9 @@
           <input class="submit-button" type="submit" value="Login">
         </div>
         <div class="line"></div>
+        {% if error %}
+                <p style="color: red; text-align: center;">{{ error }}</p>
+                {% endif %}
         <div class="field">
           <b style="margin-left:130px;">Don't have an account? </b>
           <br>
