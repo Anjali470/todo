@@ -47,6 +47,13 @@ def todo(request):
         return redirect('/todo/', {'tasks': tasks})
     tasks = ToDo.objects.filter(user=request.user).order_by('-date')
     return render(request, 'todo.html', {'tasks': tasks})
+
+def delete_todo(request, srno):
+    task = ToDo.objects.get(srno=srno)
+    task.delete()
+    tasks = ToDo.objects.filter(user=request.user).order_by('-date')
+    return redirect('/todo/', {'tasks': tasks})
+
 def logout(request):
     auth_logout(request)
     return redirect('login')
