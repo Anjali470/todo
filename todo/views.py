@@ -48,6 +48,7 @@ def todo(request):
     tasks = ToDo.objects.filter(user=request.user).order_by('-date')
     return render(request, 'todo.html', {'tasks': tasks})
 
+@login_required(login_url='login')
 def delete_todo(request, srno):
     task = ToDo.objects.get(srno=srno)
     task.delete()
