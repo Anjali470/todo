@@ -38,8 +38,15 @@ def register(request):
 
 @login_required(login_url='login')  
 def todo(request):
-    return render(request, 'todo.html')
-
+    if request.method == 'POST':
+        title = request.POST['title']
+        print(title)
+        task = ToDo.objects.create(user=request.user, title=title)
+        task.save()
+        tasks = ToDo.objects.filter(user=request.user).order_by('-date')
+        return redirect('/todo/', {'tasks': tasks})
+    tasks = ToDo.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'todo.html', {'tasks': tasks})
 def logout(request):
     auth_logout(request)
     return redirect('login')
