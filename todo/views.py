@@ -49,6 +49,17 @@ def todo(request):
     return render(request, 'todo.html', {'tasks': tasks})
 
 @login_required(login_url='login')
+def edit_todo(request, srno):
+    task = ToDo.objects.get(srno=srno)
+    if request.method == 'POST':
+        title = request.POST['title']
+        task.title = title
+        task.save()
+        tasks = ToDo.objects.filter(user=request.user).order_by('-date')
+        return redirect('/todo/', {'tasks': tasks})
+    return render(request, 'edit_todo.html', {'task': task})
+
+@login_required(login_url='login')
 def delete_todo(request, srno):
     task = ToDo.objects.get(srno=srno)
     task.delete()
