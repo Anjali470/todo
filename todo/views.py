@@ -44,27 +44,27 @@ def todo(request):
         task = ToDo.objects.create(user=request.user, title=title)
         task.save()
         tasks = ToDo.objects.filter(user=request.user).order_by('-date')
-        return redirect('/todo/', {'tasks': tasks})
+        return redirect('/todo', {'tasks': tasks})
     tasks = ToDo.objects.filter(user=request.user).order_by('-date')
     return render(request, 'todo.html', {'tasks': tasks})
 
 @login_required(login_url='login')
 def edit_todo(request, srno):
-    task = ToDo.objects.get(srno=srno)
+    task = ToDo.objects.get(user=request.user, srno=srno)
     if request.method == 'POST':
         title = request.POST['title']
         task.title = title
         task.save()
         tasks = ToDo.objects.filter(user=request.user).order_by('-date')
-        return redirect('/todo/', {'tasks': tasks})
+        return redirect('/todo', {'tasks': tasks})
     return render(request, 'edit_todo.html', {'task': task})
 
 @login_required(login_url='login')
 def delete_todo(request, srno):
-    task = ToDo.objects.get(srno=srno)
+    task = ToDo.objects.get(user=request.user, srno=srno)
     task.delete()
     tasks = ToDo.objects.filter(user=request.user).order_by('-date')
-    return redirect('/todo/', {'tasks': tasks})
+    return redirect('/todo', {'tasks': tasks})
 
 def logout(request):
     auth_logout(request)
